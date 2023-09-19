@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Collections</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!-- Font Awesome CDN -->
+    <style>
+        .copied {
+            color: green; /* Change to desired color */
+        }
+
+        .password-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .copy-icon {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Collections</h1>
+        <input type="file" id="fileInput">
+        <table id="passwordTable">
+            <tr>
+                <th>URL</th>
+                <th>ENV</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function() {
+                const content = reader.result;
+                const passwordTable = document.getElementById('passwordTable');
+                const rows = content.split('\n');
+                rows.forEach(row => {
+                    const [url, env, username, password] = row.split(',');
+                    const newRow = passwordTable.insertRow();
+                    const urlCell = newRow.insertCell(0);
+                    const envCell = newRow.insertCell(1);
+                    const usernameCell = newRow.insertCell(2);
+                    const passwordCell = newRow.insertCell(3);
+                    
+                    urlCell.innerText = url;
+                    envCell.innerText = env;
+                    usernameCell.innerText = username;
+                    passwordCell.innerText = password;
+                    passwordCell.classList.add('password-cell'); // Add the class for styling
+                    
+                    const urlCopyIcon = createCopyIcon(url, urlCell);
+                    const usernameCopyIcon = createCopyIcon(username, usernameCell);
+                    const passwordCopyIcon = createCopyIcon(password, passwordCell);
+                    
+                    urlCell.appendChild(urlCopyIcon);
+                    usernameCell.appendChild(usernameCopyIcon);
+                    passwordCell.appendChild(passwordCopyIcon);
+                });
+            };
+
+            reader.readAsText(file);
+        });
+
+        function createCopyIcon(text, cell) {
+            const copyIcon = document.createElement('i');
+            copyIcon.classList.add('fas', 'fa-copy', 'copy-icon');
+            copyIcon.addEventListener('click', function() {
+                navigator.clipboard.writeText(text).then(function() {
+                    cell.classList.add('copied');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            });
+            return copyIcon;
+        }
+    </script>
+</body>
+</html>
