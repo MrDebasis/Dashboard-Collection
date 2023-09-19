@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Collections</title>
+    <title>My Passwords</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!-- Font Awesome CDN -->
     <style>
+        .container {
+            width: 80%; /* Set the desired width */
+            margin: 0 auto; /* Center the container */
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Set the desired height */
+            height: 500px; 
+        }
+
         .copied {
             color: green; /* Change to desired color */
         }
@@ -14,26 +25,50 @@
         .password-cell {
             display: flex;
             align-items: center;
+            flex-wrap: wrap; /* Allow text to wrap */
         }
 
         .copy-icon {
             margin-left: 5px;
             cursor: pointer;
         }
+
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        #passwordTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #passwordTable th, #passwordTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .url-cell {
+            max-width: 200px; /* Set a maximum width for URL cells */
+            word-wrap: break-word;
+            white-space: normal;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>My Collections</h1>
+        <h1>My Passwords</h1>
         <input type="file" id="fileInput">
-        <table id="passwordTable">
-            <tr>
-                <th>URL</th>
-                <th>ENV</th>
-                <th>Username</th>
-                <th>Password</th>
-            </tr>
-        </table>
+        <div class="table-container">
+            <table id="passwordTable">
+                <tr>
+                    <th>URL</th>
+                    <th>ENV</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -54,6 +89,7 @@
                     const passwordCell = newRow.insertCell(3);
                     
                     urlCell.innerText = url;
+                    urlCell.classList.add('url-cell'); // Add the class for styling
                     envCell.innerText = env;
                     usernameCell.innerText = username;
                     passwordCell.innerText = password;
